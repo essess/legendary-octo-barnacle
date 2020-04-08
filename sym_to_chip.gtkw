@@ -1,0 +1,65 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Wed Apr 08 15:40:59 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[dumpfile_mtime] "Wed Apr 08 15:29:35 2020"
+[dumpfile_size] 2558
+[savefile] "C:\prj\legendary-octo-barnacle\sym_to_chip.gtkw"
+[timestart] 30000000
+[size] 1536 801
+[pos] -113 -113
+*-23.112064 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 211
+[signals_width] 170
+[sst_expanded] 1
+[sst_vpaned_height] 315
+@28
+sym_to_chip_tb.dbgsig
+@420
+sym_to_chip_tb.tstcnt
+@28
+sym_to_chip_tb.srst
+sym_to_chip_tb.clk
+@200
+-
+-
+-* SOURCE GROUP *
+@28
+sym_to_chip_tb.valid_in
+sym_to_chip_tb.source_ready_in
+sym_to_chip_tb.source_take_out
+@22
+sym_to_chip_tb.symbol_in[0:3]
+@200
+-
+-* SINK GROUP *
+@28
+sym_to_chip_tb.valid_out
+sym_to_chip_tb.sink_ready_in
+sym_to_chip_tb.sink_give_out
+@22
+sym_to_chip_tb.chip_out[0:31]
+@200
+-
+-
+-
+-* INPUT GROUP *
+@28
+sym_to_chip_tb.valid_in
+sym_to_chip_tb.sink_ready_in
+@29
+sym_to_chip_tb.source_ready_in
+@22
+sym_to_chip_tb.symbol_in[0:3]
+@200
+-
+-* OUTPUT GROUP *
+@28
+sym_to_chip_tb.valid_out
+sym_to_chip_tb.source_take_out
+sym_to_chip_tb.sink_give_out
+@22
+sym_to_chip_tb.chip_out[0:31]
+[pattern_trace] 1
+[pattern_trace] 0
