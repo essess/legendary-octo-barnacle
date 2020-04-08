@@ -1,0 +1,65 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Tue Apr 07 16:29:02 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[dumpfile_mtime] "Tue Apr 07 16:27:13 2020"
+[dumpfile_size] 2867
+[savefile] "C:\prj\legendary-octo-barnacle\byte_to_sym.gtkw"
+[timestart] 30000000
+[size] 1536 801
+[pos] -1 -1
+*-24.072477 200000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] byte_to_sym_tb.
+[sst_width] 211
+[signals_width] 192
+[sst_expanded] 1
+[sst_vpaned_height] 328
+@28
+byte_to_sym_tb.dbgsig
+@421
+byte_to_sym_tb.tstcnt
+@28
+byte_to_sym_tb.srst
+byte_to_sym_tb.clk
+@200
+-
+-
+-* SOURCE GROUP *
+@28
+byte_to_sym_tb.valid_in
+byte_to_sym_tb.source_ready_in
+byte_to_sym_tb.source_take_out
+@22
+byte_to_sym_tb.byte_in[7:0]
+@200
+-
+-* SINK GROUP *
+@28
+byte_to_sym_tb.valid_out
+byte_to_sym_tb.sink_ready_in
+byte_to_sym_tb.sink_give_out
+@22
+byte_to_sym_tb.symbol_out[3:0]
+@200
+-
+-
+-
+-* INPUT GROUP *
+@28
+byte_to_sym_tb.valid_in
+byte_to_sym_tb.source_ready_in
+byte_to_sym_tb.sink_ready_in
+@22
+byte_to_sym_tb.byte_in[7:0]
+@200
+-
+-* OUTPUT GROUP *
+@28
+byte_to_sym_tb.valid_out
+byte_to_sym_tb.source_take_out
+byte_to_sym_tb.sink_give_out
+@22
+byte_to_sym_tb.symbol_out[3:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -13,12 +13,6 @@ package phy_pkg is
   -- nothing yet
   constant TEST_CONSTANT : integer := 8675309;
 
-  component byte_to_sym is
-    generic( TPD : time := 0 ns );
-    port( clk_in  : in std_logic;
-          srst_in : in std_logic );
-  end component;
-
 end package;
 
 package body phy_pkg is
