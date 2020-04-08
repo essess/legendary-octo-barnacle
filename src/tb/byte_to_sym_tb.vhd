@@ -21,8 +21,8 @@ end entity;
 architecture dfault of byte_to_sym_tb is
 
   signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
-  signal byte_in : std_logic_vector(7 downto 0);
-  signal symbol_out : std_logic_vector(3 downto 0);
+  signal byte_in : std_logic_vector(0 to 7);
+  signal symbol_out : std_logic_vector(0 to 3);
 
   signal dbgsig : std_logic := '0';
   signal tstcnt : integer := 0;
@@ -70,7 +70,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -87,7 +87,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -102,7 +102,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -117,7 +117,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -132,7 +132,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);
+    assert symbol_out = byte_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -147,7 +147,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);
+    assert symbol_out = byte_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -162,7 +162,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);
+    assert symbol_out = byte_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -179,7 +179,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '1';
@@ -194,7 +194,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);
+    assert symbol_out = byte_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '0';
@@ -209,7 +209,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '1';
@@ -226,7 +226,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -241,7 +241,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -256,7 +256,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);  --< (not considered valid - but present)
+    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -271,7 +271,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -286,7 +286,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -301,7 +301,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -318,7 +318,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -335,7 +335,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(3 downto 0);
+    assert symbol_out = byte_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '0';
@@ -350,7 +350,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -365,7 +365,7 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(7 downto 4);
+    assert symbol_out = byte_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';

@@ -14,7 +14,14 @@ use ieee.std_logic_1164.all,
  -- (BYTE)s (TO) (SYM)bols
  --
  -- According to the 802.15.4 OQPSK phy section, this is simply the act
- -- of peeling off nibbles starting at the LSN (12.2.3)
+ -- of peeling off nibbles starting at the LSB (12.2.3)
+ --
+ -- There is a catch though,
+ -- The standard decides to use LSB->MSB bit ordering which is why (a to b)
+ -- std_logic_vector's are used here. It will 'read' naturally (as depicted
+ -- in the standard) but is valued differently. Anything that wraps this
+ -- will probably want to pay attention to reversing the bits since it's
+ -- likely that a byte input will actually be (7 downto 0) in form.
  --
  -- mealy outputs - see byte_to_sym_state_machine.pdf
 ---
@@ -25,15 +32,15 @@ entity byte_to_sym is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_ready_in : in std_logic;                     --< byte is available     \
-        source_valid_in : in std_logic;                     --< byte is valid          |__ SOURCE input
-        source_take_out : out std_logic;                    --< take byte              |
-        byte_in         : in std_logic_vector(7 downto 0);  --< byte                  /
+        source_ready_in : in std_logic;                 --< byte is available     \
+        source_valid_in : in std_logic;                 --< byte is valid          |__ SOURCE input
+        source_take_out : out std_logic;                --< take byte              |
+        byte_in         : in std_logic_vector(0 to 7);  --< byte                  /
 
-        sink_ready_in   : in  std_logic;                    --< sink ready to accept  \
-        sink_valid_out  : out std_logic;                    --< symbol is valid        |__ SINK output
-        sink_give_out   : out std_logic;                    --< give symbol            |
-        symbol_out      : out std_logic_vector(3 downto 0)  --< symbol                /
+        sink_ready_in   : in  std_logic;                --< sink ready to accept  \
+        sink_valid_out  : out std_logic;                --< symbol is valid        |__ SINK output
+        sink_give_out   : out std_logic;                --< give symbol            |
+        symbol_out      : out std_logic_vector(0 to 3)  --< symbol                /
       );
 end entity;
 
@@ -100,7 +107,7 @@ begin
   sink_give_out <= give after TPD;
   sink_valid_out <= source_valid_in after TPD;
   with state select
-    symbol_out <= byte_in(7 downto 4) after TPD when upper,
-                  byte_in(3 downto 0) after TPD when lower;
+    symbol_out <= byte_in(4 to 7) after TPD when upper,
+                  byte_in(0 to 3) after TPD when lower;
 
 end architecture;
