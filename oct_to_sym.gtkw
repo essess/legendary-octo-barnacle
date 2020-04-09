@@ -10,56 +10,56 @@
 [size] 1536 801
 [pos] -1 -1
 *-25.409513 200000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
-[treeopen] byte_to_sym_tb.
+[treeopen] oct_to_sym_tb.
 [sst_width] 211
 [signals_width] 192
 [sst_expanded] 1
 [sst_vpaned_height] 328
 @28
-byte_to_sym_tb.dbgsig
+oct_to_sym_tb.dbgsig
 @420
-byte_to_sym_tb.tstcnt
+oct_to_sym_tb.tstcnt
 @28
-byte_to_sym_tb.srst
-byte_to_sym_tb.clk
+oct_to_sym_tb.srst
+oct_to_sym_tb.clk
 @200
 -
 -
 -* SOURCE GROUP *
 @28
-byte_to_sym_tb.valid_in
-byte_to_sym_tb.source_ready_in
-byte_to_sym_tb.source_take_out
+oct_to_sym_tb.valid_in
+oct_to_sym_tb.source_ready_in
+oct_to_sym_tb.source_take_out
 @22
-byte_to_sym_tb.byte_in[0:7]
+oct_to_sym_tb.octet_in[0:7]
 @200
 -
 -* SINK GROUP *
 @28
-byte_to_sym_tb.valid_out
-byte_to_sym_tb.sink_ready_in
-byte_to_sym_tb.sink_give_out
+oct_to_sym_tb.valid_out
+oct_to_sym_tb.sink_ready_in
+oct_to_sym_tb.sink_give_out
 @22
-byte_to_sym_tb.symbol_out[0:3]
+oct_to_sym_tb.symbol_out[0:3]
 @200
 -
 -
 -
 -* INPUT GROUP *
 @28
-byte_to_sym_tb.valid_in
-byte_to_sym_tb.source_ready_in
-byte_to_sym_tb.sink_ready_in
+oct_to_sym_tb.valid_in
+oct_to_sym_tb.source_ready_in
+oct_to_sym_tb.sink_ready_in
 @22
-byte_to_sym_tb.byte_in[0:7]
+oct_to_sym_tb.octet_in[0:7]
 @200
 -
 -* OUTPUT GROUP *
 @28
-byte_to_sym_tb.valid_out
-byte_to_sym_tb.source_take_out
-byte_to_sym_tb.sink_give_out
+oct_to_sym_tb.valid_out
+oct_to_sym_tb.source_take_out
+oct_to_sym_tb.sink_give_out
 @23
-byte_to_sym_tb.symbol_out[0:3]
+oct_to_sym_tb.symbol_out[0:3]
 [pattern_trace] 1
 [pattern_trace] 0

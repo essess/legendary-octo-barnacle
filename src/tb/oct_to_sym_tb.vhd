@@ -13,15 +13,15 @@ use ieee.std_logic_1164.all,
 library osvvm;
   context osvvm.osvvmcontext;
 
-entity byte_to_sym_tb is
+entity oct_to_sym_tb is
   generic( tclk : time := 10 ns;
            TPD  : time := 0  ns );
 end entity;
 
-architecture dfault of byte_to_sym_tb is
+architecture dfault of oct_to_sym_tb is
 
   signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
-  signal byte_in : std_logic_vector(0 to 7);
+  signal octet_in : std_logic_vector(0 to 7);
   signal symbol_out : std_logic_vector(0 to 3);
 
   signal dbgsig : std_logic := '0';
@@ -38,7 +38,7 @@ begin
   CreateClock( Clk  => clk,
                Period => tclk );
 
-  dut : entity work.byte_to_sym
+  dut : entity work.oct_to_sym
     generic map( TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
@@ -46,7 +46,7 @@ begin
               source_ready_in => source_ready_in,
               source_valid_in => valid_in,
               source_take_out => source_take_out,
-              byte_in         => byte_in,
+              octet_in        => octet_in,
 
               sink_ready_in   => sink_ready_in,
               sink_valid_out  => valid_out,
@@ -63,14 +63,14 @@ begin
 
     --<< drive
     --   initial conditions
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -80,14 +80,14 @@ begin
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -95,14 +95,14 @@ begin
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -110,14 +110,14 @@ begin
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -125,14 +125,14 @@ begin
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);
+    assert symbol_out = octet_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -140,14 +140,14 @@ begin
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);
+    assert symbol_out = octet_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -155,14 +155,14 @@ begin
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);
+    assert symbol_out = octet_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -172,14 +172,14 @@ begin
 
     --<< drive
     --   ADVANCE to upper 111
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '1';
@@ -187,14 +187,14 @@ begin
 
     --<< drive
     --   ADVANCE to lower 111
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);
+    assert symbol_out = octet_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '0';
@@ -202,14 +202,14 @@ begin
 
     --<< drive
     --   ADVANCE to upper 111
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '1';
@@ -219,14 +219,14 @@ begin
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -234,14 +234,14 @@ begin
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -249,14 +249,14 @@ begin
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -264,14 +264,14 @@ begin
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -279,14 +279,14 @@ begin
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -294,14 +294,14 @@ begin
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -311,14 +311,14 @@ begin
 
     --<< drive
     --   HOLD 110 on upper because source isn't ready to advance yet
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -328,14 +328,14 @@ begin
 
     --<< drive
     --   advance to lower
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(0 to 3);
+    assert symbol_out = octet_in(0 to 3);
     assert valid_out = valid_in;
     assert sink_give_out = '1';
     assert source_take_out = '0';
@@ -343,14 +343,14 @@ begin
 
     --<< drive
     --   repeat source not ready, but should still advance
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
@@ -358,14 +358,14 @@ begin
 
     --<< drive
     --   and then should stay on upper
-    byte_in <= x"AB";
+    octet_in <= x"AB";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = byte_in(4 to 7);
+    assert symbol_out = octet_in(4 to 7);
     assert valid_out = valid_in;
     assert sink_give_out = '0';
     assert source_take_out = '0';
