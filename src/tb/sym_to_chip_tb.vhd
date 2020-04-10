@@ -140,7 +140,7 @@ begin
 
     --<< drive
     --   symbol 1, valid, source rdy, sink rdy
-    symbol_in <= b"0001";
+    symbol_in <= b"1000";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -155,7 +155,7 @@ begin
 
     --<< drive
     --   symbol 2, valid, source rdy, sink rdy
-    symbol_in <= b"0010";
+    symbol_in <= b"0100";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -170,7 +170,7 @@ begin
 
     --<< drive
     --   symbol 3, valid, source rdy, sink rdy
-    symbol_in <= b"0011";
+    symbol_in <= b"1100";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -185,7 +185,7 @@ begin
 
     --<< drive
     --   symbol 4, valid, source rdy, sink rdy
-    symbol_in <= b"0100";
+    symbol_in <= b"0010";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -200,7 +200,7 @@ begin
 
     --<< drive
     --   symbol 5, valid, source rdy, sink rdy
-    symbol_in <= b"0101";
+    symbol_in <= b"1010";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -230,7 +230,7 @@ begin
 
     --<< drive
     --   symbol 7, valid, source rdy, sink rdy
-    symbol_in <= b"0111";
+    symbol_in <= b"1110";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -245,7 +245,7 @@ begin
 
     --<< drive
     --   symbol 8, valid, source rdy, sink rdy
-    symbol_in <= b"1000";
+    symbol_in <= b"0001";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -275,7 +275,7 @@ begin
 
     --<< drive
     --   symbol 10, valid, source rdy, sink rdy
-    symbol_in <= b"1010";
+    symbol_in <= b"0101";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -290,7 +290,7 @@ begin
 
     --<< drive
     --   symbol 11, valid, source rdy, sink rdy
-    symbol_in <= b"1011";
+    symbol_in <= b"1101";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -305,7 +305,7 @@ begin
 
     --<< drive
     --   symbol 12, valid, source rdy, sink rdy
-    symbol_in <= b"1100";
+    symbol_in <= b"0011";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -320,7 +320,7 @@ begin
 
     --<< drive
     --   symbol 13, valid, source rdy, sink rdy
-    symbol_in <= b"1101";
+    symbol_in <= b"1011";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -335,7 +335,7 @@ begin
 
     --<< drive
     --   symbol 14, valid, source rdy, sink rdy
-    symbol_in <= b"1110";
+    symbol_in <= b"0111";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
