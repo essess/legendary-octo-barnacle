@@ -3,7 +3,8 @@
 SRC_DIR = src
 SRC = \
 	$(SRC_DIR)/oct_to_sym.vhd\
-	$(SRC_DIR)/sym_to_chip.vhd
+	$(SRC_DIR)/sym_to_chip.vhd\
+	$(SRC_DIR)/dsss.vhd
 
 # packages
 
@@ -17,7 +18,8 @@ TB_TOPMOD ?= tb
 TB_DIR = $(SRC_DIR)/tb
 TB = \
 	$(TB_DIR)/oct_to_sym_tb.vhd\
-	$(TB_DIR)/sym_to_chip_tb.vhd
+	$(TB_DIR)/sym_to_chip_tb.vhd\
+	$(TB_DIR)/dsss_tb.vhd
 
 GHDL_FLAGS=--std=08 -v --warn-error -fcaret-diagnostics -P/GHDL/0.36-mingw32-mcode/lib/ghdl/vendors/osvvm/v08
 
