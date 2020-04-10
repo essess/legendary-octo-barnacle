@@ -59,8 +59,6 @@ begin
     WaitForLevel( srst, '0' );
     wait until falling_edge( clk );
 
-    --[ brute force through manual vectors ]--
-
     --<< drive
     --   initial conditions
     symbol_in <= b"0000";
@@ -70,297 +68,148 @@ begin
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";  --< (not considered valid - but present)
+    assert chip_out = b"11011001110000110101001000101110";
     assert valid_out = valid_in;
---  assert sink_give_out = don't care;
---  assert source_take_out = don't care;
+    assert sink_give_out = source_ready_in;
+    assert source_take_out = sink_ready_in;
     tstcnt <= tstcnt +1;
 
-    --<< drive symbol 0 checking the give/take conditions
-    --   symbol 0, valid, source !rdy, sink !rdy
-    symbol_in <= b"0000";
-    valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '0';
-    assert sink_give_out = '0';
-    tstcnt <= tstcnt +1;
+    -- since this is a purely combinational block (and control signals
+    -- are passed through) just check that sym<->chips are correct
 
     --<< drive
-    --   symbol 0, valid, source !rdy, sink rdy
-    symbol_in <= b"0000";
-    valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '0';
-    assert sink_give_out = '0';
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 0, valid, source rdy, sink !rdy
-    symbol_in <= b"0000";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '0';
-    assert sink_give_out = '0';
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 0, valid, source rdy, sink rdy
-    symbol_in <= b"0000";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
-    tstcnt <= tstcnt +1;
-
-    -- NEXT give/take verified on sym 0, just verify the remaining chips
-
-    --<< drive
-    --   symbol 1, valid, source rdy, sink rdy
+    --   symbol 1
     symbol_in <= b"1000";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"11101101100111000011010100100010";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 2, valid, source rdy, sink rdy
+    --   symbol 2
     symbol_in <= b"0100";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"00101110110110011100001101010010";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 3, valid, source rdy, sink rdy
+    --   symbol 3
     symbol_in <= b"1100";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"00100010111011011001110000110101";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 4, valid, source rdy, sink rdy
+    --   symbol 4
     symbol_in <= b"0010";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"01010010001011101101100111000011";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 5, valid, source rdy, sink rdy
+    --   symbol 5
     symbol_in <= b"1010";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"00110101001000101110110110011100";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 6, valid, source rdy, sink rdy
+    --   symbol 6
     symbol_in <= b"0110";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"11000011010100100010111011011001";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 7, valid, source rdy, sink rdy
+    --   symbol 7
     symbol_in <= b"1110";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"10011100001101010010001011101101";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 8, valid, source rdy, sink rdy
+    --   symbol 8
     symbol_in <= b"0001";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"10001100100101100000011101111011";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 9, valid, source rdy, sink rdy
+    --   symbol 9
     symbol_in <= b"1001";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"10111000110010010110000001110111";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 10, valid, source rdy, sink rdy
+    --   symbol 10
     symbol_in <= b"0101";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"01111011100011001001011000000111";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 11, valid, source rdy, sink rdy
+    --   symbol 11
     symbol_in <= b"1101";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"01110111101110001100100101100000";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 12, valid, source rdy, sink rdy
+    --   symbol 12
     symbol_in <= b"0011";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"00000111011110111000110010010110";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 13, valid, source rdy, sink rdy
+    --   symbol 13
     symbol_in <= b"1011";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"01100000011101111011100011001001";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 14, valid, source rdy, sink rdy
+    --   symbol 14
     symbol_in <= b"0111";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"10010110000001110111101110001100";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 15, valid, source rdy, sink rdy
+    --   symbol 15
     symbol_in <= b"1111";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert chip_out = b"11001001011000000111011110111000";  --< VALID
-    assert valid_out = valid_in;
-    assert source_take_out = '1';
-    assert sink_give_out = '1';
     tstcnt <= tstcnt +1;
 
     wait for 1*tclk;

@@ -21,7 +21,7 @@ use ieee.std_logic_1164.all,
  -- std_logic_vector's are used here. It will 'read' naturally (as depicted
  -- in the standard) but is valued differently.
  --
- -- mealy outputs
+ -- purely combinational block
 ---
 
 entity sym_to_chip is
@@ -67,10 +67,9 @@ with symbol_in select                                               --  sym     
           b"1100_1001_0110_0000_0111_0111_1011_1000" when others;   --<  15   0xEE06931D (ror 14)
 
   -- drive
-  sink_valid_out <= source_valid_in after TPD;
-  advance <= sink_ready_in and source_ready_in;
-  sink_give_out <= advance after TPD;
-  source_take_out <= advance after TPD;
-  chip_out <= chip after TPD;
+  sink_valid_out  <= source_valid_in after TPD;
+  source_take_out <= sink_ready_in   after TPD;
+  sink_give_out   <= source_ready_in after TPD;
+  chip_out        <= chip            after TPD;
 
 end architecture;
