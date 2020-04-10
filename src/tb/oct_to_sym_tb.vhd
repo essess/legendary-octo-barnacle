@@ -63,7 +63,7 @@ begin
 
     --<< drive
     --   initial conditions
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
@@ -80,7 +80,7 @@ begin
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
@@ -95,7 +95,7 @@ begin
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
@@ -110,7 +110,7 @@ begin
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
@@ -125,7 +125,7 @@ begin
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -140,7 +140,7 @@ begin
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
@@ -155,7 +155,7 @@ begin
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
@@ -172,7 +172,7 @@ begin
 
     --<< drive
     --   ADVANCE to upper 111
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -187,7 +187,7 @@ begin
 
     --<< drive
     --   ADVANCE to lower 111
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -202,7 +202,7 @@ begin
 
     --<< drive
     --   ADVANCE to upper 111
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -219,7 +219,7 @@ begin
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
@@ -234,7 +234,7 @@ begin
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
@@ -249,7 +249,7 @@ begin
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
@@ -264,7 +264,7 @@ begin
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -279,7 +279,7 @@ begin
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
@@ -294,7 +294,7 @@ begin
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
@@ -311,7 +311,7 @@ begin
 
     --<< drive
     --   HOLD 110 on upper because source isn't ready to advance yet
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
@@ -328,7 +328,7 @@ begin
 
     --<< drive
     --   advance to lower
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
@@ -343,7 +343,7 @@ begin
 
     --<< drive
     --   repeat source not ready, but should still advance
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
@@ -358,7 +358,7 @@ begin
 
     --<< drive
     --   and then should stay on upper
-    octet_in <= x"AB";
+    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
