@@ -1,67 +1,48 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Apr 10 21:50:37 2020
+[*] Wed Apr 15 17:51:11 2020
 [*]
 [dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
-[dumpfile_mtime] "Fri Apr 10 21:45:43 2020"
-[dumpfile_size] 5259
+[dumpfile_mtime] "Wed Apr 15 17:47:39 2020"
+[dumpfile_size] 3721
 [savefile] "C:\prj\legendary-octo-barnacle\sym_to_chip.gtkw"
-[timestart] 30000000
+[timestart] 20000000
 [size] 1536 801
 [pos] -1 -1
-*-24.970795 185000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-24.468294 140000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] sym_to_chip_tb.
 [sst_width] 211
 [signals_width] 239
 [sst_expanded] 1
-[sst_vpaned_height] 315
+[sst_vpaned_height] 89
 @28
 sym_to_chip_tb.dbgsig
 @420
 sym_to_chip_tb.tstcnt
 @28
 sym_to_chip_tb.srst
+@29
 sym_to_chip_tb.clk
 @200
+-
+-
 -
 -* SOURCE GROUP *
 @28
 sym_to_chip_tb.valid_in
 sym_to_chip_tb.source_ready_in
-sym_to_chip_tb.source_take_out
-sym_to_chip_tb.symbol_in[0:3]
-@a4
-sym_to_chip_tb.symbol_in[0:3]
+sym_to_chip_tb.take
+sym_to_chip_tb.chip_chunk[0:7]
 @200
+-
+-
+-
 -
 -* SINK GROUP *
 @28
 sym_to_chip_tb.valid_out
 sym_to_chip_tb.sink_ready_in
-sym_to_chip_tb.sink_give_out
-sym_to_chip_tb.chip_out[0:31]
-@a3
-sym_to_chip_tb.chip_out[0:31]
-@200
--
--
--
--* INPUT GROUP *
-@28
-sym_to_chip_tb.valid_in
-sym_to_chip_tb.sink_ready_in
-sym_to_chip_tb.source_ready_in
-sym_to_chip_tb.symbol_in[0:3]
-@a4
-sym_to_chip_tb.symbol_in[0:3]
-@200
--
--* OUTPUT GROUP *
-@28
-sym_to_chip_tb.valid_out
-sym_to_chip_tb.source_take_out
-sym_to_chip_tb.sink_give_out
-sym_to_chip_tb.chip_out[0:31]
-@a2
-sym_to_chip_tb.chip_out[0:31]
+sym_to_chip_tb.give
+sym_to_chip_tb.symbol[0:3]
 [pattern_trace] 1
 [pattern_trace] 0

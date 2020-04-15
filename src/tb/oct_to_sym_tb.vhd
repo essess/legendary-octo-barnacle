@@ -20,9 +20,9 @@ end entity;
 
 architecture dfault of oct_to_sym_tb is
 
-  signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
-  signal octet_in : std_logic_vector(0 to 7);
-  signal symbol_out : std_logic_vector(0 to 3);
+  signal clk, srst, source_ready_in, sink_ready_in, give, take, valid_in, valid_out : std_logic;
+  signal octet : std_logic_vector(0 to 7);
+  signal symbol : std_logic_vector(0 to 3);
 
   signal dbgsig : std_logic := '0';
   signal tstcnt : integer := 0;
@@ -45,13 +45,13 @@ begin
 
               source_ready_in => source_ready_in,
               source_valid_in => valid_in,
-              source_take_out => source_take_out,
-              octet_in        => octet_in,
+              source_take_out => take,
+              octet_in        => octet,
 
               sink_ready_in   => sink_ready_in,
               sink_valid_out  => valid_out,
-              sink_give_out   => sink_give_out,
-              symbol_out      => symbol_out );
+              sink_give_out   => give,
+              symbol_out      => symbol );
 
   test : process
   begin
@@ -63,312 +63,312 @@ begin
 
     --<< drive
     --   initial conditions
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol = octet(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --[ start walking through state machine ]--
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol = octet(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol = octet(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);  --< (not considered valid - but present)
+    assert symbol = octet(0 to 3);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);
+    assert symbol = octet(0 to 3);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);
+    assert symbol = octet(0 to 3);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);
+    assert symbol = octet(0 to 3);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --[ advance to upper -> lower -> upper ]--
 
     --<< drive
     --   ADVANCE to upper 111
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '1';
+    assert give = '1';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   ADVANCE to lower 111
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);
+    assert symbol = octet(0 to 3);
     assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '0';
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   ADVANCE to upper 111
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '1';
+    assert give = '1';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --[ now go through same HOLD checks while on upper ]--
 
     --<< drive
     --   HOLD 000 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol = octet(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 001 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol = octet(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 010 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);  --< (not considered valid - but present)
+    assert symbol = octet(4 to 7);  --< (not considered valid - but present)
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 011 (source is invalid)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '0';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 100 (is valid, sink !rdy, src !rdy)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   HOLD 101 (is valid, sink !rdy, src rdy)
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --[ if sink is ready, but source isn't (and we're on upper nibble) then HOLD upper ]--
 
     --<< drive
     --   HOLD 110 on upper because source isn't ready to advance yet
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --[ go back to lower and do the same thing ]--
 
     --<< drive
     --   advance to lower
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(0 to 3);
+    assert symbol = octet(0 to 3);
     assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '0';
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   repeat source not ready, but should still advance
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
     --   and then should stay on upper
-    octet_in <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
+    octet <= b"1101_0101";
     valid_in <= '1';
     source_ready_in <= '0';
     sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert symbol_out = octet_in(4 to 7);
+    assert symbol = octet(4 to 7);
     assert valid_out = valid_in;
-    assert sink_give_out = '0';
-    assert source_take_out = '0';
+    assert give = '0';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     wait for 1*tclk;

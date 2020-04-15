@@ -20,9 +20,9 @@ end entity;
 
 architecture dfault of sym_to_chip_tb is
 
-  signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
-  signal symbol_in : std_logic_vector(0 to 3);
-  signal chip_out : std_logic_vector(0 to 31);
+  signal clk, srst, source_ready_in, sink_ready_in, give, take, valid_in, valid_out : std_logic;
+  signal symbol : std_logic_vector(0 to 3);
+  signal chip_chunk : std_logic_vector(0 to 7);
 
   signal dbgsig : std_logic := '0';
   signal tstcnt : integer := 0;
@@ -45,13 +45,13 @@ begin
 
               source_ready_in => source_ready_in,
               source_valid_in => valid_in,
-              source_take_out => source_take_out,
-              symbol_in       => symbol_in,
+              source_take_out => take,
+              symbol_in       => symbol,
 
               sink_ready_in   => sink_ready_in,
               sink_valid_out  => valid_out,
-              sink_give_out   => sink_give_out,
-              chip_out        => chip_out );
+              sink_give_out   => give,
+              chip_chunk_out  => chip_chunk );
 
   test : process
   begin
@@ -61,156 +61,157 @@ begin
 
     --<< drive
     --   initial conditions
-    symbol_in <= b"0000";
+    symbol <= b"0000";
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"11011001110000110101001000101110";
+    assert chip_chunk = b"11011001";  --< 0 to 7
     assert valid_out = valid_in;
-    assert sink_give_out = source_ready_in;
-    assert source_take_out = sink_ready_in;
-    tstcnt <= tstcnt +1;
-
-    -- since this is a purely combinational block (and control signals
-    -- are passed through) just check that sym<->chips are correct
-
-    --<< drive
-    --   symbol 1
-    symbol_in <= b"1000";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11101101100111000011010100100010";  --< VALID
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 2
-    symbol_in <= b"0100";
+    --   advance by one chunk
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"00101110110110011100001101010010";  --< VALID
+    assert chip_chunk = b"11000011";  --< 8 to 15
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 3
-    symbol_in <= b"1100";
+    --   drive valid_in inactive and verify hold
+    symbol <= b"0000";
+    valid_in <= '0';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"00100010111011011001110000110101";  --< VALID
+    assert chip_chunk = b"11000011";  --< 8 to 15 (held, but invalid)
+    assert valid_out = valid_in;
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 4
-    symbol_in <= b"0010";
+    --   drive sink_ready inactive and verify hold
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"01010010001011101101100111000011";  --< VALID
+    assert chip_chunk = b"11000011";  --< 8 to 15 (held and valid)
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 5
-    symbol_in <= b"1010";
+    --   advance by one chunk
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"00110101001000101110110110011100";  --< VALID
+    assert chip_chunk = b"01010010";  --< 16 to 23
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 6
-    symbol_in <= b"0110";
+    --   advance to last chunk
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"11000011010100100010111011011001";  --< VALID
+    assert chip_chunk = b"00101110";  --< 24 to 31
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '1';
+    tstcnt <= tstcnt +1;
+
+    -- repeat hold tests above
+
+    --<< drive
+    --   drive valid_in inactive and verify hold
+    symbol <= b"0000";
+    valid_in <= '0';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"00101110";  --< 24 to 31 (held, but invalid)
+    assert valid_out = valid_in;
+    assert give = '0';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 7
-    symbol_in <= b"1110";
+    --   drive sink_ready inactive and verify hold
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"10011100001101010010001011101101";  --< VALID
+    assert chip_chunk = b"00101110";  --< 24 to 31 (held and valid)
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 8
-    symbol_in <= b"0001";
+    --   one more, but the source isn't ready
+    symbol <= b"0000";
+    valid_in <= '1';
+    source_ready_in <= '0';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"10001100100101100000011101111011";  --< VALID
+    assert chip_chunk = b"00101110";  --< 24 to 31 (held and valid)
+    assert valid_out = valid_in;
+    assert give = '0';
+    assert take = '1';
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   symbol 9
-    symbol_in <= b"1001";
+    --   advance to first chunk of next symbol
+    symbol <= b"0001";
+    valid_in <= '1';
+    source_ready_in <= '1';
+    sink_ready_in <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = b"10111000110010010110000001110111";  --< VALID
+    assert chip_chunk = b"10001100";  --< 0 to 7
+    assert valid_out = valid_in;
+    assert give = '1';
+    assert take = '0';
     tstcnt <= tstcnt +1;
 
-    --<< drive
-    --   symbol 10
-    symbol_in <= b"0101";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"01111011100011001001011000000111";  --< VALID
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 11
-    symbol_in <= b"1101";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"01110111101110001100100101100000";  --< VALID
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 12
-    symbol_in <= b"0011";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"00000111011110111000110010010110";  --< VALID
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 13
-    symbol_in <= b"1011";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"01100000011101111011100011001001";  --< VALID
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 14
-    symbol_in <= b"0111";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"10010110000001110111101110001100";  --< VALID
-    tstcnt <= tstcnt +1;
-
-    --<< drive
-    --   symbol 15
-    symbol_in <= b"1111";
-    wait until rising_edge( clk );
-    -->> verify
-    wait until falling_edge( clk );
-    assert chip_out = b"11001001011000000111011110111000";  --< VALID
-    tstcnt <= tstcnt +1;
+    -- verify rest of chips if desired ...
 
     wait for 1*tclk;
     report "DONE"; std.env.stop;

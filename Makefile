@@ -2,6 +2,7 @@
 
 SRC_DIR = src
 SRC = \
+	$(SRC_DIR)/selector.vhd\
 	$(SRC_DIR)/oct_to_sym.vhd\
 	$(SRC_DIR)/sym_to_chip.vhd\
 	$(SRC_DIR)/dsss.vhd

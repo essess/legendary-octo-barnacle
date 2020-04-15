@@ -24,7 +24,7 @@ use ieee.std_logic_1164.all,
  -- likely that a byte input will actually be (7 downto 0) in form. This is
  -- also why the term octet is used here (to mirror the standard better).
  --
- -- mealy outputs - see oct_to_sym_state_machine.pdf
+ -- see sm_tables.xlsx/.pdf for more information
 ---
 
 entity oct_to_sym is
@@ -47,68 +47,32 @@ end entity;
 
 architecture dfault of oct_to_sym is
 
-  type state_t is ( upper,    --< drive upper nibble of input byte as output symbol
-                    lower );  --< drive lower nibble of input byte as output symbol
-  signal state, nxt : state_t;
-  signal take, give : std_logic;
+  signal valid, take, give : std_logic;
+
+  constant VAL_LOW  : integer := 0;
+  constant VAL_HIGH : integer := 1;
+  signal selection : integer range VAL_LOW to VAL_HIGH;
 
 begin
 
-  -- state
-  process(clk_in)
-  begin
-    if rising_edge(clk_in) then
-      state <= nxt;
-      if srst_in = '1' then
-        state <= lower;
-      end if;
-    end if;
-  end process;
+  selector_inst : entity work.selector
+    generic map ( VAL_LOW => VAL_LOW,
+                  VAL_HIGH => VAL_HIGH )
+    port map( clk_in  => clk_in,
+              srst_in => srst_in,
+              source_ready_in => source_ready_in,
+              source_valid_in => source_valid_in,
+              source_take_out => take,
+              sink_ready_in  => sink_ready_in,
+              sink_valid_out => valid,
+              sink_give_out  => give,
+              value_out      => selection );
 
-  -- combinational
-  process(state, source_ready_in, sink_ready_in, source_valid_in)
-    variable inputs : std_logic_vector(2 downto 0);
-  begin
-    inputs := (source_valid_in, sink_ready_in, source_ready_in);
-    case inputs is
-      when "110" =>
-         case state is
-          when upper =>   --< hold on upper until source ready
-            nxt <= upper;
-            give <= '0';
-            take <= '0';
-          when lower =>   --< ok to advance on lower nibble
-            nxt <= upper;
-            give <= '1';
-            take <= '0';
-        end case;
-
-      when "111" =>       --< advance
-        case state is
-          when upper =>
-            nxt <= lower;
-            give <= '1';
-            take <= '1';
-          when lower =>
-            nxt <= upper;
-            give <= '1';
-            take <= '0';  --< don't advance the source!
-        end case;
-
-      when others =>      --< ready inputs are invalid
-        nxt <= state;     --  (or sink not ready)
-        give <= '0';
-        take <= '0';
-    end case;
-
-  end process;
-
-  -- drive signals
-  source_take_out <= take after TPD;
-  sink_give_out <= give after TPD;
-  sink_valid_out <= source_valid_in after TPD;
-  with state select
-    symbol_out <= octet_in(4 to 7) after TPD when upper,
-                  octet_in(0 to 3) after TPD when lower;
+  -- drive ------------------------------------
+  sink_valid_out  <= valid after TPD;
+  source_take_out <= take  after TPD;
+  sink_give_out   <= give  after TPD;
+  symbol_out      <= octet_in(0 to 3) when selection = VAL_LOW else
+                     octet_in(4 to 7) after TPD;
 
 end architecture;

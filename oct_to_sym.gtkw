@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Fri Apr 10 17:55:46 2020
+[*] Wed Apr 15 20:33:16 2020
 [*]
 [dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
-[dumpfile_mtime] "Fri Apr 10 17:54:15 2020"
-[dumpfile_size] 3834
+[dumpfile_mtime] "Wed Apr 15 20:31:35 2020"
+[dumpfile_size] 4961
 [savefile] "C:\prj\legendary-octo-barnacle\oct_to_sym.gtkw"
-[timestart] 20000000
+[timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-25.351160 200000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-25.351160 40000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] oct_to_sym_tb.
 [sst_width] 211
 [signals_width] 241
@@ -21,42 +21,29 @@ oct_to_sym_tb.dbgsig
 oct_to_sym_tb.tstcnt
 @28
 oct_to_sym_tb.srst
+@29
 oct_to_sym_tb.clk
 @200
+-
 -
 -
 -* SOURCE GROUP *
 @28
 oct_to_sym_tb.valid_in
 oct_to_sym_tb.source_ready_in
-oct_to_sym_tb.source_take_out
-oct_to_sym_tb.octet_in[0:7]
+oct_to_sym_tb.take
+oct_to_sym_tb.octet[0:7]
 @200
+-
+-
+-
+-
 -
 -* SINK GROUP *
 @28
 oct_to_sym_tb.valid_out
 oct_to_sym_tb.sink_ready_in
-oct_to_sym_tb.sink_give_out
-@29
-oct_to_sym_tb.symbol_out[0:3]
-@200
--
--
--
--* INPUT GROUP *
-@28
-oct_to_sym_tb.valid_in
-oct_to_sym_tb.source_ready_in
-oct_to_sym_tb.sink_ready_in
-oct_to_sym_tb.octet_in[0:7]
-@200
--
--* OUTPUT GROUP *
-@28
-oct_to_sym_tb.valid_out
-oct_to_sym_tb.source_take_out
-oct_to_sym_tb.sink_give_out
-oct_to_sym_tb.symbol_out[0:3]
+oct_to_sym_tb.give
+oct_to_sym_tb.symbol[0:3]
 [pattern_trace] 1
 [pattern_trace] 0

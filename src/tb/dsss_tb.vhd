@@ -22,7 +22,7 @@ architecture dfault of dsss_tb is
 
   signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
   signal byte_in : std_logic_vector(7 downto 0);
-  signal chip_out : std_logic_vector(31 downto 0);
+  signal chip_chunk : std_logic_vector(7 downto 0);
 
   signal dbgsig : std_logic := '0';
   signal tstcnt : integer := 0;
@@ -51,7 +51,7 @@ begin
               sink_ready_in   => sink_ready_in,
               sink_valid_out  => valid_out,
               sink_give_out   => sink_give_out,
-              chip_out        => chip_out );
+              chip_chunk_out  => chip_chunk );
 
   test : process
   begin
@@ -59,71 +59,104 @@ begin
     WaitForLevel( srst, '0' );
     wait until falling_edge( clk );
 
-    --[ drive a couple of bytes and check the chips ]--
+    -- drive a byte (floor it) and check the chips
+    -- backpressure already verified in deeper blocks
 
+            --  7  downto 0
+    byte_in <= b"0101_1000"; --\
+            -- b"0001_1010"  -- \
+            --  0   to    7   --  \__ symbols: 8, 5 (in that order)
     --<< drive
-    --   initial conditions (symbol 0x0 selected)
-    byte_in <= x"80";
+    --   initial conditions
     valid_in <= '0';
     source_ready_in <= '0';
     sink_ready_in <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = x"744AC39B";  --< (not considered valid - but present)
+--  assert chip_chunk = don't care;
     assert valid_out = valid_in;
 --  assert sink_give_out = don't care;
 --  assert source_take_out = don't care;
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   next symbol
-    byte_in <= x"80";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    --   chip chunk zero of symbol 8
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = x"DEE06931";
-    assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '1';
+    assert chip_chunk = b"0011_0001";
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   next symbol
-    byte_in <= x"80";
-    valid_in <= '1';
     source_ready_in <= '1';
     sink_ready_in <= '1';
+    --   chip chunk one of symbol 8
     wait until rising_edge( clk );
-    dbgsig <= '1';
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = x"744AC39B";
-    assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '0';
+    assert chip_chunk = b"0110_1001";
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   next symbol
-    byte_in <= x"80";
-    valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    --   chip chunk two of symbol 8
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert chip_out = x"DEE06931";
-    assert valid_out = valid_in;
-    assert sink_give_out = '1';
-    assert source_take_out = '1';
+    assert chip_chunk = b"1110_0000";
     tstcnt <= tstcnt +1;
 
-    -- the rest already verified via oct_to_sym_tb
-    -- this was mostly a sanity check
+    --<< drive
+    --   chip chunk three (final) of symbol 8
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"1101_1110";
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    --   chip chunk zero of symbol 5
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"1010_1100";
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    --   chip chunk one of symbol 5
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"0100_0100";
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    --   chip chunk two of symbol 5
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"1011_0111";
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    --   chip chunk three (final) of symbol 5
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"0011_1001";
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    --   back to chip chunk zero of symbol 8
+    wait until rising_edge( clk );
+    -->> verify
+    wait until falling_edge( clk );
+    assert chip_chunk = b"0011_0001";
+    tstcnt <= tstcnt +1;
+
+--     -- the rest already verified via oct_to_sym_tb
+--     -- this was mostly a sanity check
 
     wait for 1*tclk;
     report "DONE"; std.env.stop;

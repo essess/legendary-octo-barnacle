@@ -11,7 +11,7 @@ use ieee.std_logic_1164.all,
 --  work.phy_pkg.all;
 
 ---
- -- (D)irect (S)equence (S)pread (S)pectrum
+ -- (D)irect (S)equence (S)pread (S)pectrum chip generator
  --
  -- NOTE:
  -- This block is intended to interface to things which assume the
@@ -33,17 +33,17 @@ entity dsss is
         byte_in         : in std_logic_vector(7 downto 0);  --< byte                 /
 
         sink_ready_in   : in  std_logic;                    --< sink ready to accept \
-        sink_valid_out  : out std_logic;                    --< chip is valid         |__ SINK output
-        sink_give_out   : out std_logic;                    --< give chip             |
-        chip_out        : out std_logic_vector(31 downto 0) --< chip                 /
+        sink_valid_out  : out std_logic;                    --< chip chunk is valid   |__ SINK output
+        sink_give_out   : out std_logic;                    --< give chip chunk       |
+        chip_chunk_out  : out std_logic_vector(7 downto 0)  --< chip chunk           /
       );
 end entity;
 
 architecture dfault of dsss is
 
-  signal octet : std_logic_vector(byte_in'reverse_range);   --< look below to see why
+  signal octet : std_logic_vector(byte_in'reverse_range);             --< look below to see why
   signal symbol : std_logic_vector(0 to 3);
-  signal chip : std_logic_vector(chip_out'reverse_range);   --< look below to see why
+  signal chip_chunk : std_logic_vector(chip_chunk_out'reverse_range); --< look below to see why
   signal valid, give, take : std_logic;
 
 begin
@@ -88,16 +88,10 @@ begin
                sink_ready_in  => sink_ready_in,
                sink_valid_out => sink_valid_out,
                sink_give_out  => sink_give_out,
-               chip_out       => chip );
+               chip_chunk_out => chip_chunk );
 
    -- drive
-   chip_out <= ( chip(31), chip(30), chip(29), chip(28),
-                 chip(27), chip(26), chip(25), chip(24),
-                 chip(23), chip(22), chip(21), chip(20),
-                 chip(19), chip(18), chip(17), chip(16),
-                 chip(15), chip(14), chip(13), chip(12),
-                 chip(11), chip(10), chip( 9), chip( 8),
-                 chip( 7), chip( 6), chip( 5), chip( 4),
-                 chip( 3), chip( 2), chip( 1), chip( 0) );
+   chip_chunk_out <= ( chip_chunk(7), chip_chunk(6), chip_chunk(5), chip_chunk(4),
+                       chip_chunk(3), chip_chunk(2), chip_chunk(1), chip_chunk(0) );
 
 end architecture;
