@@ -72,7 +72,7 @@ begin
   sink_valid_out  <= valid after TPD;
   source_take_out <= take  after TPD;
   sink_give_out   <= give  after TPD;
-  symbol_out      <= octet_in(0 to 3) when selection = VAL_LOW else
+  symbol_out      <= octet_in(0 to 3) after TPD when selection = VAL_LOW else
                      octet_in(4 to 7) after TPD;
 
 end architecture;
