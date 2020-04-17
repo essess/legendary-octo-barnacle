@@ -1,0 +1,46 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Thu Apr 16 13:51:21 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[dumpfile_mtime] "Thu Apr 16 13:47:35 2020"
+[dumpfile_size] 5569
+[savefile] "C:\prj\legendary-octo-barnacle\chip_to_dig_qpsk.gtkw"
+[timestart] 20000000
+[size] 1536 801
+[pos] -1 -1
+*-26.199558 129800000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] chip_to_dig_qpsk_tb.
+[sst_width] 211
+[signals_width] 183
+[sst_expanded] 1
+[sst_vpaned_height] 225
+@28
+chip_to_dig_qpsk_tb.dbgsig
+chip_to_dig_qpsk_tb.srst
+chip_to_dig_qpsk_tb.clk
+@200
+-
+@201
+-
+@200
+-
+@28
+chip_to_dig_qpsk_tb.valid_in
+chip_to_dig_qpsk_tb.source_ready
+chip_to_dig_qpsk_tb.take
+chip_to_dig_qpsk_tb.chip[7:0]
+@200
+-
+-
+-
+-
+-
+@28
+chip_to_dig_qpsk_tb.valid_out
+chip_to_dig_qpsk_tb.sink_ready
+chip_to_dig_qpsk_tb.give
+chip_to_dig_qpsk_tb.i
+chip_to_dig_qpsk_tb.q
+[pattern_trace] 1
+[pattern_trace] 0
