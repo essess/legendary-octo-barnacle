@@ -33,13 +33,13 @@ entity oct_to_sym is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_ready_in : in std_logic;                 --< octet is available    \
-        source_valid_in : in std_logic;                 --< octet is valid         |__ SOURCE input
+        source_valid_in : in std_logic;                 --< octet is valid        \
+        source_ready_in : in std_logic;                 --< octet is available     |__ SOURCE input
         source_take_out : out std_logic;                --< take octet             |
         octet_in        : in std_logic_vector(0 to 7);  --< octet                 /
 
-        sink_ready_in   : in  std_logic;                --< sink ready to accept  \
-        sink_valid_out  : out std_logic;                --< symbol is valid        |__ SINK output
+        sink_valid_out  : out std_logic;                --< symbol is valid       \
+        sink_ready_in   : in  std_logic;                --< sink ready to accept   |__ SINK output
         sink_give_out   : out std_logic;                --< give symbol            |
         symbol_out      : out std_logic_vector(0 to 3)  --< symbol                /
       );
@@ -56,22 +56,21 @@ architecture dfault of oct_to_sym is
 begin
 
   selector_inst : entity work.selector
-    generic map ( VAL_LOW => VAL_LOW,
+    generic map ( VAL_LOW  => VAL_LOW,
                   VAL_HIGH => VAL_HIGH )
     port map( clk_in  => clk_in,
               srst_in => srst_in,
-              source_ready_in => source_ready_in,
               source_valid_in => source_valid_in,
+              source_ready_in => source_ready_in,
               source_take_out => take,
               sink_ready_in  => sink_ready_in,
-              sink_valid_out => valid,
               sink_give_out  => give,
               value_out      => selection );
 
   -- drive ------------------------------------
-  sink_valid_out  <= valid after TPD;
-  source_take_out <= take  after TPD;
-  sink_give_out   <= give  after TPD;
+  sink_valid_out  <= source_valid_in after TPD;
+  source_take_out <= take after TPD;
+  sink_give_out   <= give after TPD;
   symbol_out      <= octet_in(0 to 3) after TPD when selection = VAL_LOW else
                      octet_in(4 to 7) after TPD;
 

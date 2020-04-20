@@ -31,13 +31,13 @@ entity sym_to_chip is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_ready_in : in std_logic;                 --< symbol is available  \
-        source_valid_in : in std_logic;                 --< symbol is valid       |__ SOURCE input
+        source_valid_in : in std_logic;                 --< symbol is valid      \
+        source_ready_in : in std_logic;                 --< symbol is available   |__ SOURCE input
         source_take_out : out std_logic;                --< take symbol           |
         symbol_in       : in std_logic_vector(0 to 3);  --< symbol               /
 
-        sink_ready_in   : in  std_logic;                --< sink ready to accept \
-        sink_valid_out  : out std_logic;                --< chip chunk is valid   |__ SINK output
+        sink_valid_out  : out std_logic;                --< chip chunk is valid  \
+        sink_ready_in   : in  std_logic;                --< sink ready to accept  |__ SINK output
         sink_give_out   : out std_logic;                --< give chip chunk       |
         chip_chunk_out  : out std_logic_vector(0 to 7)  --< chip chunk           /
       );
@@ -56,17 +56,16 @@ architecture dfault of sym_to_chip is
 begin
 
   selector_inst : entity work.selector
-    generic map ( VAL_LOW => VAL_LOW,
+    generic map ( VAL_LOW  => VAL_LOW,
                   VAL_HIGH => VAL_HIGH )
     port map( clk_in  => clk_in,
               srst_in => srst_in,
-              source_ready_in => source_ready_in,
               source_valid_in => source_valid_in,
+              source_ready_in => source_ready_in,
               source_take_out => take,
-              sink_ready_in  => sink_ready_in,
-              sink_valid_out => valid,
-              sink_give_out  => give,
-              value_out      => selection );
+              sink_ready_in => sink_ready_in,
+              sink_give_out => give,
+              value_out     => selection );
 
   -- section 12.2.4, table 12-1 : -----------------------------------------------------------------
   with symbol_in select                                               --  sym        chip
@@ -94,9 +93,9 @@ begin
                   chip( 0 to  7) when others;
 
   -- drive ------------------------------------
-  sink_valid_out  <= valid      after TPD;
-  source_take_out <= take       after TPD;
-  sink_give_out   <= give       after TPD;
+  sink_valid_out  <= source_valid_in after TPD;
+  source_take_out <= take after TPD;
+  sink_give_out   <= give after TPD;
   chip_chunk_out  <= chip_chunk after TPD;
 
 end architecture;

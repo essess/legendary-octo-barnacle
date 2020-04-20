@@ -32,13 +32,12 @@ entity selector is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_ready_in : in std_logic;                 --< \
-        source_valid_in : in std_logic;                 --<  |__ source side
-        source_take_out : out std_logic;                --< /
+        source_valid_in : in std_logic;       --< ready/take/give qualifier
+        source_ready_in : in std_logic;
+        source_take_out : out std_logic;
 
-        sink_ready_in   : in  std_logic;                --< \
-        sink_valid_out  : out std_logic;                --<  |__ sink side
-        sink_give_out   : out std_logic;                --< /
+        sink_ready_in   : in  std_logic;
+        sink_give_out   : out std_logic;
         value_out   : out positive range VAL_LOW to VAL_HIGH
       );
 end entity;
@@ -98,9 +97,8 @@ begin
   end process;
 
   -- drive ------------------------------------
-  sink_valid_out  <= source_valid_in after TPD;
-  source_take_out <= take            after TPD;
-  sink_give_out   <= give            after TPD;
-  value_out       <= value           after TPD;
+  source_take_out <= take  after TPD;
+  sink_give_out   <= give  after TPD;
+  value_out       <= value after TPD;
 
 end architecture;

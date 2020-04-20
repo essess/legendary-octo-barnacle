@@ -27,13 +27,13 @@ entity dsss is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_ready_in : in std_logic;                     --< byte is available    \
-        source_valid_in : in std_logic;                     --< byte is valid         |__ SOURCE input
+        source_valid_in : in std_logic;                     --< byte is valid        \
+        source_ready_in : in std_logic;                     --< byte is available     |__ SOURCE input
         source_take_out : out std_logic;                    --< take byte             |
         byte_in         : in std_logic_vector(7 downto 0);  --< byte                 /
 
-        sink_ready_in   : in  std_logic;                    --< sink ready to accept \
-        sink_valid_out  : out std_logic;                    --< chip chunk is valid   |__ SINK output
+        sink_valid_out  : out std_logic;                    --< chip chunk is valid  \
+        sink_ready_in   : in  std_logic;                    --< sink ready to accept  |__ SINK output
         sink_give_out   : out std_logic;                    --< give chip chunk       |
         chip_chunk_out  : out std_logic_vector(7 downto 0)  --< chip chunk           /
       );
@@ -64,12 +64,10 @@ begin
   oct_to_sym_inst : entity work.oct_to_sym
     port map ( clk_in  => clk_in,
                srst_in => srst_in,
-
                source_ready_in => source_ready_in,
                source_valid_in => source_valid_in,
                source_take_out => source_take_out,
                octet_in        => octet,
-
                sink_valid_out => valid,
                sink_ready_in  => take,
                sink_give_out  => give,
@@ -79,12 +77,10 @@ begin
     generic map ( TPD => TPD )
     port map ( clk_in  => clk_in,
                srst_in => srst_in,
-
                source_valid_in => valid,
                source_ready_in => give,
                source_take_out => take,
                symbol_in       => symbol,
-
                sink_ready_in  => sink_ready_in,
                sink_valid_out => sink_valid_out,
                sink_give_out  => sink_give_out,
