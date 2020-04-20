@@ -18,7 +18,9 @@ use ieee.std_logic_1164.all,
  -- (while also controlling give/take/valid) and as such, makes a
  -- good automated selector signal for other blocks. Mealy outputs
  -- allow easy integration with other combinational items, like
- -- muxes.
+ -- muxes. ASSUMES that your datapath WILL BE COMBINATIONAL --- when
+ -- on the final sequenced value 'give' WILL NOT assert if source
+ -- is not ready to advance either.
  --
  -- see sm_tables.xlsx/.pdf for more information
  --

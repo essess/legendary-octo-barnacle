@@ -19,6 +19,7 @@ PKG = \
 TB_TOPMOD ?= tb
 TB_DIR = $(SRC_DIR)/tb
 TB = \
+	$(TB_DIR)/selector_tb.vhd\
 	$(TB_DIR)/oct_to_sym_tb.vhd\
 	$(TB_DIR)/sym_to_chip_tb.vhd\
 	$(TB_DIR)/dsss_tb.vhd\

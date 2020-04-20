@@ -1,0 +1,42 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Mon Apr 20 18:24:38 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[dumpfile_mtime] "Mon Apr 20 18:20:05 2020"
+[dumpfile_size] 2660
+[savefile] "C:\prj\legendary-octo-barnacle\selector_tb.gtkw"
+[timestart] 0
+[size] 1536 801
+[pos] -1 -1
+*-24.135801 35000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 211
+[signals_width] 188
+[sst_expanded] 1
+[sst_vpaned_height] 328
+@28
+selector_tb.dbgsig
+@421
+selector_tb.tstcnt
+@28
+selector_tb.srst
+selector_tb.clk
+@200
+-
+-
+-
+-** SOURCE ***
+@28
+selector_tb.source_ready
+selector_tb.take
+@200
+-
+-
+-*** SINK ***
+@28
+selector_tb.sink_ready
+selector_tb.give
+@420
+selector_tb.value
+[pattern_trace] 1
+[pattern_trace] 0
