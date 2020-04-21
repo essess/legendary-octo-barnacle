@@ -74,10 +74,15 @@ begin
               sink_give_out => sink_give,
               value_out     => selection );
 
-  -- Pass through sink_give state when i_sink AND q_sink behaviors
-  -- are in agreement. Otherwise NEVER give. Also mimck same for
-  -- ready behavior; sink side considered ready only when both i/q
-  -- sinks are in agreement.
+  -- Consider the case where the I path may be ready, but the Q path
+  -- is not. By design, the selector instance above will still assert
+  -- give on sink !ready (assuming source is ready). On the next clock,
+  -- Q will expect the last sample to be held and I will expect the
+  -- sample to be advanced.
+  --
+  -- So, pass through sink_give state when i_sink AND q_sink behaviors
+  -- are in agreement. Otherwise NEVER give. Sink side ports are ready
+  -- only when both i/q sinks are in agreement.
   agree <= I_sink_ready_in xnor Q_sink_ready_in;
   give <= sink_give when agree else '0';
   sink_ready <= I_sink_ready_in and Q_sink_ready_in;

@@ -178,9 +178,64 @@ begin
     assert q_give = '1';
     tstcnt <= tstcnt +1;
 
-    -- TODO: verify i/q_sink_ready_in and i/q_give_out operations!
-    --       the sample zero hold above hints to this special case that
-    --       doesn't strictly adhere to default selector operation.
+    -- verify i/q_sink_ready_in and i/q_give_out operations
+    -- the sample zero hold above hints to this special case that
+    -- doesn't strictly adhere to default selector operation.
+
+    --<< drive
+    chip <= b"00_01_10_11"; -- msb -> lsb !!
+    valid_in     <= '1';
+    source_ready <= '1';
+    i_sink_ready <= '0';              --< anytime ready_in is in disagreement ...
+    q_sink_ready <= '1';              --  then give is driven low. Consider the case
+    wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
+    -->> verify                       --  asserted for both paths. I expects the sample
+    wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects
+    assert take = '0';                --  it to hold the current value
+    assert i_valid_out = valid_in;
+    assert i_give = '0';
+    assert q_valid_out = valid_in;
+    assert q_give = '0';
+    assert i = '1';                   --< last value held? (!)
+    assert q = '1';                   --< last value held? (!)
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    chip <= b"00_01_10_11"; -- msb -> lsb !!
+    valid_in     <= '1';
+    source_ready <= '1';
+    i_sink_ready <= '1';              --< anytime ready_in is in disagreement ...
+    q_sink_ready <= '0';              --  then give is driven low. Consider the case
+    wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
+    -->> verify                       --  asserted for both paths. I expects the sample
+    wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects
+    assert take = '0';                --  it to hold the current value
+    assert i_valid_out = valid_in;
+    assert i_give = '0';
+    assert q_valid_out = valid_in;
+    assert q_give = '0';
+    assert i = '1';                   --< last value held? (!)
+    assert q = '1';                   --< last value held? (!)
+    tstcnt <= tstcnt +1;
+
+    --<< drive
+    chip <= b"00_01_10_11"; -- msb -> lsb !!
+    valid_in     <= '1';
+    source_ready <= '1';
+    i_sink_ready <= '0';              --< anytime ready_in is in disagreement ...
+    q_sink_ready <= '0';              --  then give is driven low. Consider the case
+    wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
+    -->> verify                       --  asserted for both paths. I expects the sample
+    wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects
+    assert take = '0';                --  it to hold the current value
+    assert i_valid_out = valid_in;
+    assert i_give = '1';              --< special case where both readys are in agreement!
+    assert q_valid_out = valid_in;
+    assert q_give = '1';              --< special case where both readys are in agreement!
+    assert i = '1';                   --< last value held? (!)
+    assert q = '1';                   --< last value held? (!)
+    tstcnt <= tstcnt +1;
+
 
     wait for 1*tclk;
     report "DONE"; std.env.stop;
