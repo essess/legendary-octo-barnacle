@@ -28,7 +28,7 @@ chip_to_dig_qpsk_tb.clk
 -
 @28
 chip_to_dig_qpsk_tb.valid_in
-chip_to_dig_qpsk_tb.source_ready
+chip_to_dig_qpsk_tb.sink_ready
 chip_to_dig_qpsk_tb.take
 chip_to_dig_qpsk_tb.chip[7:0]
 @200
@@ -39,7 +39,7 @@ chip_to_dig_qpsk_tb.chip[7:0]
 -
 @28
 chip_to_dig_qpsk_tb.i_valid_out
-chip_to_dig_qpsk_tb.i_sink_ready
+chip_to_dig_qpsk_tb.i_source_ready
 chip_to_dig_qpsk_tb.i_give
 chip_to_dig_qpsk_tb.i
 @200
@@ -48,7 +48,7 @@ chip_to_dig_qpsk_tb.i
 -
 @28
 chip_to_dig_qpsk_tb.q_valid_out
-chip_to_dig_qpsk_tb.q_sink_ready
+chip_to_dig_qpsk_tb.q_source_ready
 chip_to_dig_qpsk_tb.q_give
 chip_to_dig_qpsk_tb.q
 [pattern_trace] 1

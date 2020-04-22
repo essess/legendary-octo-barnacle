@@ -27,10 +27,10 @@ sym_to_chip_tb.clk
 -
 -
 -
--* SOURCE GROUP *
+-* SINK GROUP *
 @28
 sym_to_chip_tb.valid_in
-sym_to_chip_tb.source_ready_in
+sym_to_chip_tb.sink_ready
 sym_to_chip_tb.take
 sym_to_chip_tb.chip_chunk[0:7]
 @200
@@ -38,10 +38,10 @@ sym_to_chip_tb.chip_chunk[0:7]
 -
 -
 -
--* SINK GROUP *
+-* SOURCE GROUP *
 @28
 sym_to_chip_tb.valid_out
-sym_to_chip_tb.sink_ready_in
+sym_to_chip_tb.source_ready
 sym_to_chip_tb.give
 sym_to_chip_tb.symbol[0:3]
 [pattern_trace] 1

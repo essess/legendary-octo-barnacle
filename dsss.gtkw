@@ -1,18 +1,18 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Wed Apr 15 19:09:18 2020
+[*] Wed Apr 22 19:04:40 2020
 [*]
 [dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
-[dumpfile_mtime] "Wed Apr 15 19:07:44 2020"
-[dumpfile_size] 5769
+[dumpfile_mtime] "Wed Apr 22 19:03:40 2020"
+[dumpfile_size] 7132
 [savefile] "C:\prj\legendary-octo-barnacle\dsss.gtkw"
-[timestart] 30000000
+[timestart] 0
 [size] 1536 801
 [pos] -1 -1
-*-24.452902 74400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-24.806862 74400000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dsss_tb.
 [sst_width] 211
-[signals_width] 315
+[signals_width] 214
 [sst_expanded] 1
 [sst_vpaned_height] 166
 @28
@@ -25,23 +25,22 @@ dsss_tb.srst
 @200
 -
 -
--* SOURCE GROUP *
+-* SINK GROUP *
 @28
 dsss_tb.valid_in
-dsss_tb.source_ready_in
-dsss_tb.source_take_out
+dsss_tb.sink_ready
+dsss_tb.take
 @22
-dsss_tb.byte_in[7:0]
+dsss_tb.byte[7:0]
 @200
 -
 -
 -
--* SINK GROUP *
+-* SOURCE GROUP *
 @28
 dsss_tb.valid_out
-dsss_tb.sink_ready_in
-@29
-dsss_tb.sink_give_out
+dsss_tb.source_ready
+dsss_tb.give
 @22
 dsss_tb.chip_chunk[7:0]
 [pattern_trace] 1

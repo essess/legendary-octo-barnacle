@@ -20,9 +20,9 @@ end entity;
 
 architecture dfault of chip_to_dig_qpsk_tb is
 
-  signal clk, srst, take, valid_in, source_ready : std_logic;
-  signal i, i_give, i_sink_ready, i_valid_out : std_logic;
-  signal q, q_give, q_sink_ready, q_valid_out : std_logic;
+  signal clk, srst, take, valid_in, sink_ready : std_logic;
+  signal i, i_give, i_source_ready, i_valid_out : std_logic;
+  signal q, q_give, q_source_ready, q_valid_out : std_logic;
   signal chip : std_logic_vector(7 downto 0);
 
   signal dbgsig : std_logic := '0';
@@ -36,28 +36,25 @@ begin
                Period => 1*tclk,
                tpd => tclk/2 );
 
-  CreateClock( Clk  => clk,
+  CreateClock( Clk => clk,
                Period => tclk );
 
   dut : entity work.chip_to_dig_qpsk
     generic map( TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
-
-              source_ready_in => source_ready,
-              source_valid_in => valid_in,
-              source_take_out => take,
-              chip_in         => chip,
-
-              I_sink_ready_in  => i_sink_ready,
-              I_sink_valid_out => i_valid_out,
-              I_sink_give_out  => i_give,
-              I_out            => i,
-
-              Q_sink_ready_in  => q_sink_ready,
-              Q_sink_valid_out => q_valid_out,
-              Q_sink_give_out  => q_give,
-              Q_out            => q );
+              sink_valid_in => valid_in,
+              sink_ready_in => sink_ready,
+              sink_take_out => take,
+              chip_in       => chip,
+              I_source_valid_out => i_valid_out,
+              I_source_ready_in  => i_source_ready,
+              I_source_give_out  => i_give,
+              I_out              => i,
+              Q_source_valid_out => q_valid_out,
+              Q_source_ready_in  => q_source_ready,
+              Q_source_give_out  => q_give,
+              Q_out              => q );
 
   test : process
   begin
@@ -68,10 +65,10 @@ begin
     --<< drive
     --   initial conditions
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '0';
-    source_ready <= '1';
-    i_sink_ready <= '1';
-    q_sink_ready <= '1';
+    valid_in       <= '0';
+    sink_ready     <= '1';
+    i_source_ready <= '1';
+    q_source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -86,10 +83,10 @@ begin
     --<< drive
     --   iq sample zero
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '0';
-    q_sink_ready <= '0';    --< don't advance output just yet
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '0';
+    q_source_ready <= '0';    --< don't advance output just yet
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -105,10 +102,10 @@ begin
     --<< drive
     --   iq sample one
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '1';
-    q_sink_ready <= '1';
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '1';
+    q_source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -124,10 +121,10 @@ begin
     --<< drive
     --   iq sample two
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '1';
-    q_sink_ready <= '1';
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '1';
+    q_source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -143,10 +140,10 @@ begin
     --<< drive
     --   iq sample three/final
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '1';
-    q_sink_ready <= '1';
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '1';
+    q_source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -162,10 +159,10 @@ begin
     --<< drive
     --   iq sample one - repeat?
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '1';
-    q_sink_ready <= '1';
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '1';
+    q_source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -178,16 +175,16 @@ begin
     assert q_give = '1';
     tstcnt <= tstcnt +1;
 
-    -- verify i/q_sink_ready_in and i/q_give_out operations
+    -- verify i/q_source_ready_in and i/q_give_out operations
     -- the sample zero hold above hints to this special case that
     -- doesn't strictly adhere to default selector operation.
 
     --<< drive
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '0';              --< anytime ready_in is in disagreement ...
-    q_sink_ready <= '1';              --  then give is driven low. Consider the case
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '0';            --< anytime ready_in is in disagreement ...
+    q_source_ready <= '1';            --  then give is driven low. Consider the case
     wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
     -->> verify                       --  asserted for both paths. I expects the sample
     wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects
@@ -202,10 +199,10 @@ begin
 
     --<< drive
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '1';              --< anytime ready_in is in disagreement ...
-    q_sink_ready <= '0';              --  then give is driven low. Consider the case
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '1';            --< anytime ready_in is in disagreement ...
+    q_source_ready <= '0';            --  then give is driven low. Consider the case
     wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
     -->> verify                       --  asserted for both paths. I expects the sample
     wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects
@@ -220,10 +217,10 @@ begin
 
     --<< drive
     chip <= b"00_01_10_11"; -- msb -> lsb !!
-    valid_in     <= '1';
-    source_ready <= '1';
-    i_sink_ready <= '0';              --< anytime ready_in is in disagreement ...
-    q_sink_ready <= '0';              --  then give is driven low. Consider the case
+    valid_in       <= '1';
+    sink_ready     <= '1';
+    i_source_ready <= '0';            --< anytime ready_in is in disagreement ...
+    q_source_ready <= '0';            --  then give is driven low. Consider the case
     wait until rising_edge( clk );    --  where I is rdy, and Q isn't but give is still
     -->> verify                       --  asserted for both paths. I expects the sample
     wait until falling_edge( clk );   --  to advance on the next clock whereas Q expects

@@ -34,13 +34,13 @@ entity selector is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_valid_in : in std_logic;       --< ready/take/give qualifier
-        source_ready_in : in std_logic;
-        source_take_out : out std_logic;
+        sink_valid_in : in std_logic;       --< ready/take/give qualifier
+        sink_ready_in : in std_logic;
+        sink_take_out : out std_logic;
 
-        sink_ready_in   : in  std_logic;
-        sink_give_out   : out std_logic;
-        value_out   : out positive range VAL_LOW to VAL_HIGH
+        source_ready_in : in  std_logic;
+        source_give_out : out std_logic;
+        value_out       : out positive range VAL_LOW to VAL_HIGH
       );
 end entity;
 
@@ -60,15 +60,15 @@ begin
     end if;
   end process;
 
-  -- value combinational --------------------------------------------
-  -------(give, take, next_value)                                 --< out
-  process(source_valid_in, source_ready_in, sink_ready_in, value) --< in
+  -- value combinational ------------------------------------------
+  -------(give, take, next_value)                               --< out
+  process(sink_valid_in, sink_ready_in, source_ready_in, value) --< in
     variable inputs : std_logic_vector(2 downto 0);
     variable last : std_logic;
   begin --< literal translation of selector table in sm_tables.xlsx/.pdf :
-    if source_valid_in = '1' then
+    if sink_valid_in = '1' then
       last   := '1' when (value = VAL_HIGH) else '0';
-      inputs := (source_ready_in, sink_ready_in, last);
+      inputs := (sink_ready_in, source_ready_in, last);
       case inputs is
         when "110" | "010" =>           --< next
           take <= '0';
@@ -99,8 +99,8 @@ begin
   end process;
 
   -- drive ------------------------------------
-  source_take_out <= take  after TPD;
-  sink_give_out   <= give  after TPD;
+  sink_take_out   <= take  after TPD;
+  source_give_out <= give  after TPD;
   value_out       <= value after TPD;
 
 end architecture;

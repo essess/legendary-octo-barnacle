@@ -27,15 +27,15 @@ entity dsss is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_valid_in : in std_logic;                     --< byte is valid        \
-        source_ready_in : in std_logic;                     --< byte is available     |__ SOURCE input
-        source_take_out : out std_logic;                    --< take byte             |
-        byte_in         : in std_logic_vector(7 downto 0);  --< byte                 /
+        sink_valid_in : in std_logic;                       --< byte is valid        \
+        sink_ready_in : in std_logic;                       --< byte is available     |__ sink input
+        sink_take_out : out std_logic;                      --< take byte             |
+        byte_in       : in std_logic_vector(7 downto 0);    --< byte                 /
 
-        sink_valid_out  : out std_logic;                    --< chip chunk is valid  \
-        sink_ready_in   : in  std_logic;                    --< sink ready to accept  |__ SINK output
-        sink_give_out   : out std_logic;                    --< give chip chunk       |
-        chip_chunk_out  : out std_logic_vector(7 downto 0)  --< chip chunk           /
+        source_valid_out : out std_logic;                   --< chip chunk is valid  \
+        source_ready_in  : in  std_logic;                   --< sink ready to accept  |__ source output
+        source_give_out  : out std_logic;                   --< give chip chunk       |
+        chip_chunk_out   : out std_logic_vector(7 downto 0) --< chip chunk           /
       );
 end entity;
 
@@ -64,27 +64,27 @@ begin
   oct_to_sym_inst : entity work.oct_to_sym
     port map ( clk_in  => clk_in,
                srst_in => srst_in,
-               source_ready_in => source_ready_in,
-               source_valid_in => source_valid_in,
-               source_take_out => source_take_out,
-               octet_in        => octet,
-               sink_valid_out => valid,
-               sink_ready_in  => take,
-               sink_give_out  => give,
-               symbol_out     => symbol );
+               sink_valid_in => sink_valid_in,
+               sink_ready_in => sink_ready_in,
+               sink_take_out => sink_take_out,
+               octet_in      => octet,
+               source_valid_out => valid,
+               source_ready_in  => take,
+               source_give_out  => give,
+               symbol_out       => symbol );
 
   sym_to_chip_inst : entity work.sym_to_chip
     generic map ( TPD => TPD )
     port map ( clk_in  => clk_in,
                srst_in => srst_in,
-               source_valid_in => valid,
-               source_ready_in => give,
-               source_take_out => take,
-               symbol_in       => symbol,
-               sink_ready_in  => sink_ready_in,
-               sink_valid_out => sink_valid_out,
-               sink_give_out  => sink_give_out,
-               chip_chunk_out => chip_chunk );
+               sink_valid_in => valid,
+               sink_ready_in => give,
+               sink_take_out => take,
+               symbol_in     => symbol,
+               source_ready_in  => source_ready_in,
+               source_valid_out => source_valid_out,
+               source_give_out  => source_give_out,
+               chip_chunk_out   => chip_chunk );
 
    -- drive
    chip_chunk_out <= ( chip_chunk(7), chip_chunk(6), chip_chunk(5), chip_chunk(4),

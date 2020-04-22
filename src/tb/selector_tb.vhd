@@ -20,12 +20,12 @@ end entity;
 
 architecture dfault of selector_tb is
 
-  signal clk, srst, source_ready, sink_ready, give, take, valid : std_logic;
+  signal clk, srst, sink_ready, source_ready, give, take, valid : std_logic;
 
   signal dbgsig : std_logic := '0';
   signal tstcnt : integer := 0;
 
-  constant VAL_LOW  : integer := 0;
+  constant VAL_LOW : integer := 0;
   constant VAL_HIGH : integer := 1;
   signal value : integer range VAL_LOW to VAL_HIGH;
 
@@ -46,14 +46,12 @@ begin
                  TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
-
-              source_valid_in => valid,
+              sink_valid_in => valid,
+              sink_ready_in => sink_ready,
+              sink_take_out => take,
               source_ready_in => source_ready,
-              source_take_out => take,
-
-              sink_ready_in  => sink_ready,
-              sink_give_out  => give,
-              value_out      => value );
+              source_give_out => give,
+              value_out       => value );
 
   test : process
   begin
@@ -66,8 +64,8 @@ begin
     --<< drive
     --   initial conditions
     valid        <= '0';
-    source_ready <= '0';
     sink_ready   <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -78,32 +76,32 @@ begin
 
     --<< drive
     valid        <= '1';
-    source_ready <= '0';
     sink_ready   <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
     assert value = VAL_LOW;             --< NOW VALID (and should be initial value)
-    assert give = '1';                  --< sink isn't ready, but should still try to give anyways
+    assert give = '1';                  --< source isn't ready, but should still try to give anyways
     assert take = '0';                  --< take not needed on initial value (this is a combinational path)
     tstcnt <= tstcnt +1;
 
     --<< drive
     valid        <= '1';
-    source_ready <= '1';
-    sink_ready   <= '0';
+    sink_ready   <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert value = VAL_LOW;             --< still initial value (unable to advance -- sink still !ready)
+    assert value = VAL_LOW;             --< still initial value (unable to advance -- source still !ready)
     assert give = '1';                  --<
     assert take = '0';                  --< take not needed on initial value (this is a combinational path)
     tstcnt <= tstcnt +1;
 
     --<< drive
     valid        <= '1';
-    source_ready <= '1';
     sink_ready   <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -114,20 +112,20 @@ begin
 
     --<< drive
     valid        <= '1';
-    source_ready <= '0';
-    sink_ready   <= '1';
+    sink_ready   <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
-    assert value = VAL_HIGH;            --< hold on last value, because source isn't ready to advance
-    assert give = '0';                  --< because source not ready to advance yet SEE selector.vhd NOTE!
+    assert value = VAL_HIGH;            --< hold on last value, because sink isn't ready to advance
+    assert give = '0';                  --< because sink not ready to advance yet SEE selector.vhd NOTE!
     assert take = '1';                  --< still try to take regardless
     tstcnt <= tstcnt +1;
 
     --<< drive
     valid        <= '1';
-    source_ready <= '1';
     sink_ready   <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );

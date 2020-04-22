@@ -20,7 +20,7 @@ end entity;
 
 architecture dfault of sym_to_chip_tb is
 
-  signal clk, srst, source_ready_in, sink_ready_in, give, take, valid_in, valid_out : std_logic;
+  signal clk, srst, sink_ready, source_ready, give, take, valid_in, valid_out : std_logic;
   signal symbol : std_logic_vector(0 to 3);
   signal chip_chunk : std_logic_vector(0 to 7);
 
@@ -35,23 +35,21 @@ begin
                Period => 1*tclk,
                tpd => tclk/2 );
 
-  CreateClock( Clk  => clk,
+  CreateClock( Clk => clk,
                Period => tclk );
 
   dut : entity work.sym_to_chip
     generic map( TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
-
-              source_ready_in => source_ready_in,
-              source_valid_in => valid_in,
-              source_take_out => take,
-              symbol_in       => symbol,
-
-              sink_ready_in   => sink_ready_in,
-              sink_valid_out  => valid_out,
-              sink_give_out   => give,
-              chip_chunk_out  => chip_chunk );
+              sink_valid_in => valid_in,
+              sink_ready_in => sink_ready,
+              sink_take_out => take,
+              symbol_in     => symbol,
+              source_valid_out => valid_out,
+              source_ready_in  => source_ready,
+              source_give_out  => give,
+              chip_chunk_out   => chip_chunk );
 
   test : process
   begin
@@ -63,8 +61,8 @@ begin
     --   initial conditions
     symbol <= b"0000";
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    sink_ready <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -78,8 +76,8 @@ begin
     --   advance by one chunk
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -93,8 +91,8 @@ begin
     --   drive valid_in inactive and verify hold
     symbol <= b"0000";
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -108,8 +106,8 @@ begin
     --   drive sink_ready inactive and verify hold
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    sink_ready <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -123,8 +121,8 @@ begin
     --   advance by one chunk
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -138,8 +136,8 @@ begin
     --   advance to last chunk
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -155,8 +153,8 @@ begin
     --   drive valid_in inactive and verify hold
     symbol <= b"0000";
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -170,8 +168,8 @@ begin
     --   drive sink_ready inactive and verify hold
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    sink_ready <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -185,8 +183,8 @@ begin
     --   one more, but the source isn't ready
     symbol <= b"0000";
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    sink_ready <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -200,8 +198,8 @@ begin
     --   advance to first chunk of next symbol
     symbol <= b"0001";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );

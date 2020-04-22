@@ -20,8 +20,8 @@ end entity;
 
 architecture dfault of dsss_tb is
 
-  signal clk, srst, source_ready_in, sink_ready_in, sink_give_out, source_take_out, valid_in, valid_out : std_logic;
-  signal byte_in : std_logic_vector(7 downto 0);
+  signal clk, srst, sink_ready, source_ready, give, take, valid_in, valid_out : std_logic;
+  signal byte : std_logic_vector(7 downto 0);
   signal chip_chunk : std_logic_vector(7 downto 0);
 
   signal dbgsig : std_logic := '0';
@@ -35,23 +35,21 @@ begin
                Period => 1*tclk,
                tpd => tclk/2 );
 
-  CreateClock( Clk  => clk,
+  CreateClock( Clk => clk,
                Period => tclk );
 
   dut : entity work.dsss
     generic map( TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
-
-              source_ready_in => source_ready_in,
-              source_valid_in => valid_in,
-              source_take_out => source_take_out,
-              byte_in         => byte_in,
-
-              sink_ready_in   => sink_ready_in,
-              sink_valid_out  => valid_out,
-              sink_give_out   => sink_give_out,
-              chip_chunk_out  => chip_chunk );
+              sink_valid_in => valid_in,
+              sink_ready_in => sink_ready,
+              sink_take_out => take,
+              byte_in       => byte,
+              source_valid_out => valid_out,
+              source_ready_in  => source_ready,
+              source_give_out  => give,
+              chip_chunk_out   => chip_chunk );
 
   test : process
   begin
@@ -59,18 +57,18 @@ begin
     WaitForLevel( srst, '0' );
     wait until falling_edge( clk );
 
-    -- drive a byte (floor it) and check the chips
+    -- drive a byte (floor it!) and check the chips
     -- backpressure already verified in deeper blocks
 
-            --  7  downto 0
-    byte_in <= b"0101_1000"; --\
-            -- b"0001_1010"  -- \
-            --  0   to    7   --  \__ symbols: 8, 5 (in that order)
+          --  7  downto 0
+    byte <= b"0101_1000"; --\
+         -- b"0001_1010"  -- \
+         --  0   to    7  --  \__ symbols: 8, 5 (in that order)
     --<< drive
     --   initial conditions
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    sink_ready <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -90,8 +88,8 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     --   chip chunk one of symbol 8
     wait until rising_edge( clk );
     -->> verify

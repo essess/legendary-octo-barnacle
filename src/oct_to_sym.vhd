@@ -33,15 +33,15 @@ entity oct_to_sym is
         clk_in  : in std_logic;
         srst_in : in std_logic;
 
-        source_valid_in : in std_logic;                 --< octet is valid        \
-        source_ready_in : in std_logic;                 --< octet is available     |__ SOURCE input
-        source_take_out : out std_logic;                --< take octet             |
-        octet_in        : in std_logic_vector(0 to 7);  --< octet                 /
+        sink_valid_in : in std_logic;                   --< octet is valid        \
+        sink_ready_in : in std_logic;                   --< octet is available     |__ sink input
+        sink_take_out : out std_logic;                  --< take octet             |
+        octet_in      : in std_logic_vector(0 to 7);    --< octet                 /
 
-        sink_valid_out  : out std_logic;                --< symbol is valid       \
-        sink_ready_in   : in  std_logic;                --< sink ready to accept   |__ SINK output
-        sink_give_out   : out std_logic;                --< give symbol            |
-        symbol_out      : out std_logic_vector(0 to 3)  --< symbol                /
+        source_valid_out : out std_logic;               --< symbol is valid       \
+        source_ready_in  : in  std_logic;               --< sink ready to accept   |__ source output
+        source_give_out  : out std_logic;               --< give symbol            |
+        symbol_out       : out std_logic_vector(0 to 3) --< symbol                /
       );
 end entity;
 
@@ -49,7 +49,7 @@ architecture dfault of oct_to_sym is
 
   signal valid, take, give : std_logic;
 
-  constant VAL_LOW  : integer := 0;
+  constant VAL_LOW : integer := 0;
   constant VAL_HIGH : integer := 1;
   signal selection : integer range VAL_LOW to VAL_HIGH;
 
@@ -60,18 +60,18 @@ begin
                   VAL_HIGH => VAL_HIGH )
     port map( clk_in  => clk_in,
               srst_in => srst_in,
-              source_valid_in => source_valid_in,
+              sink_valid_in => sink_valid_in,
+              sink_ready_in => sink_ready_in,
+              sink_take_out => take,
               source_ready_in => source_ready_in,
-              source_take_out => take,
-              sink_ready_in  => sink_ready_in,
-              sink_give_out  => give,
-              value_out      => selection );
+              source_give_out => give,
+              value_out       => selection );
 
   -- drive ------------------------------------
-  sink_valid_out  <= source_valid_in after TPD;
-  source_take_out <= take after TPD;
-  sink_give_out   <= give after TPD;
-  symbol_out      <= octet_in(0 to 3) after TPD when selection = VAL_LOW else
-                     octet_in(4 to 7) after TPD;
+  source_valid_out <= sink_valid_in after TPD;
+  source_give_out  <= give after TPD;
+  sink_take_out    <= take after TPD;
+  symbol_out       <= octet_in(0 to 3) after TPD when selection = VAL_LOW else
+                      octet_in(4 to 7) after TPD;
 
 end architecture;

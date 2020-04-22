@@ -20,7 +20,7 @@ end entity;
 
 architecture dfault of oct_to_sym_tb is
 
-  signal clk, srst, source_ready_in, sink_ready_in, give, take, valid_in, valid_out : std_logic;
+  signal clk, srst, sink_ready, source_ready, give, take, valid_in, valid_out : std_logic;
   signal octet : std_logic_vector(0 to 7);
   signal symbol : std_logic_vector(0 to 3);
 
@@ -35,23 +35,21 @@ begin
                Period => 1*tclk,
                tpd => tclk/2 );
 
-  CreateClock( Clk  => clk,
+  CreateClock( Clk => clk,
                Period => tclk );
 
   dut : entity work.oct_to_sym
     generic map( TPD => TPD )
     port map( clk_in  => clk,
               srst_in => srst,
-
-              source_ready_in => source_ready_in,
-              source_valid_in => valid_in,
-              source_take_out => take,
-              octet_in        => octet,
-
-              sink_ready_in   => sink_ready_in,
-              sink_valid_out  => valid_out,
-              sink_give_out   => give,
-              symbol_out      => symbol );
+              sink_ready_in => sink_ready,
+              sink_valid_in => valid_in,
+              sink_take_out => take,
+              octet_in      => octet,
+              source_ready_in  => source_ready,
+              source_valid_out => valid_out,
+              source_give_out  => give,
+              symbol_out       => symbol );
 
   test : process
   begin
@@ -65,8 +63,8 @@ begin
     --   initial conditions
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    source_ready <= '0';
+    sink_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -79,11 +77,11 @@ begin
     --[ start walking through state machine ]--
 
     --<< drive
-    --   HOLD 000 (source is invalid)
+    --   HOLD 000 (sink is invalid)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    source_ready <= '0';
+    sink_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -94,11 +92,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 001 (source is invalid)
+    --   HOLD 001 (sink is invalid)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    source_ready <= '0';
+    sink_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -109,11 +107,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 010 (source is invalid)
+    --   HOLD 010 (sink is invalid)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    source_ready <= '1';
+    sink_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -124,11 +122,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 011 (source is invalid)
+    --   HOLD 011 (sink is invalid)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    source_ready <= '1';
+    sink_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -139,11 +137,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 100 (is valid, sink !rdy, src !rdy)
+    --   HOLD 100 (is valid, source !rdy, sink !rdy)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    source_ready <= '0';
+    sink_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -154,11 +152,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 101 (is valid, sink !rdy, src rdy)
+    --   HOLD 101 (is valid, source !rdy, sink rdy)
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    sink_ready <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -174,8 +172,8 @@ begin
     --   ADVANCE to upper 111
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -189,8 +187,8 @@ begin
     --   ADVANCE to lower 111
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -204,8 +202,8 @@ begin
     --   ADVANCE to upper 111
     octet <= b"1101_0101";             --< (0xAB lsb to msb // reads as 0xD5 in GTKWave)
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -218,11 +216,11 @@ begin
     --[ now go through same HOLD checks while on upper ]--
 
     --<< drive
-    --   HOLD 000 (source is invalid)
+    --   HOLD 000 (sink is invalid)
     octet <= b"1101_0101";
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    sink_ready <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -233,11 +231,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 001 (source is invalid)
+    --   HOLD 001 (sink is invalid)
     octet <= b"1101_0101";
     valid_in <= '0';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    sink_ready <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -248,11 +246,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 010 (source is invalid)
+    --   HOLD 010 (sink is invalid)
     octet <= b"1101_0101";
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    sink_ready <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -263,11 +261,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 011 (source is invalid)
+    --   HOLD 011 (sink is invalid)
     octet <= b"1101_0101";
     valid_in <= '0';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -278,11 +276,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 100 (is valid, sink !rdy, src !rdy)
+    --   HOLD 100 (is valid, source !rdy, sink !rdy)
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '0';
+    sink_ready <= '0';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -293,11 +291,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   HOLD 101 (is valid, sink !rdy, src rdy)
+    --   HOLD 101 (is valid, source !rdy, sink rdy)
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '0';
+    sink_ready <= '1';
+    source_ready <= '0';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -307,14 +305,14 @@ begin
     assert take = '0';
     tstcnt <= tstcnt +1;
 
-    --[ if sink is ready, but source isn't (and we're on upper nibble) then HOLD upper ]--
+    --[ if source is ready, but sink isn't (and we're on upper nibble) then HOLD upper ]--
 
     --<< drive
-    --   HOLD 110 on upper because source isn't ready to advance yet
+    --   HOLD 110 on upper because sink isn't ready to advance yet
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    sink_ready <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -330,8 +328,8 @@ begin
     --   advance to lower
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '1';
-    sink_ready_in <= '1';
+    sink_ready <= '1';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -342,11 +340,11 @@ begin
     tstcnt <= tstcnt +1;
 
     --<< drive
-    --   repeat source not ready, but should still advance
+    --   repeat sink not ready, but should still advance
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    sink_ready <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
@@ -360,8 +358,8 @@ begin
     --   and then should stay on upper
     octet <= b"1101_0101";
     valid_in <= '1';
-    source_ready_in <= '0';
-    sink_ready_in <= '1';
+    sink_ready <= '0';
+    source_ready <= '1';
     wait until rising_edge( clk );
     -->> verify
     wait until falling_edge( clk );
