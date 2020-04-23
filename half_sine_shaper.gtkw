@@ -1,0 +1,48 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Thu Apr 23 15:28:22 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[dumpfile_mtime] "Thu Apr 23 14:53:19 2020"
+[dumpfile_size] 10487
+[savefile] "C:\prj\legendary-octo-barnacle\half_sine_shaper.gtkw"
+[timestart] 0
+[size] 1536 801
+[pos] -1 -1
+*-26.511532 64000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 211
+[signals_width] 165
+[sst_expanded] 1
+[sst_vpaned_height] 225
+@28
+half_sine_shaper_tb.dbgsig
+@420
+half_sine_shaper_tb.tstcnt
+@28
+half_sine_shaper_tb.srst
+half_sine_shaper_tb.clk
+@200
+-
+-
+-
+@28
+half_sine_shaper_tb.valid_in
+half_sine_shaper_tb.sink_ready
+half_sine_shaper_tb.take
+half_sine_shaper_tb.sample_in
+@200
+-
+-
+@28
+half_sine_shaper_tb.valid_out
+half_sine_shaper_tb.source_ready
+half_sine_shaper_tb.give
+@40018421
+[fpshift_count] 15
+half_sine_shaper_tb.sample[15:0]
+@20000
+-
+-
+-
+[pattern_trace] 1
+[pattern_trace] 0
