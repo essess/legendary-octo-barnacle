@@ -8,7 +8,8 @@ SRC = \
 	$(SRC_DIR)/dsss.vhd\
 	$(SRC_DIR)/chip_to_dig_qpsk.vhd\
 	$(SRC_DIR)/half_sine_shaper.vhd\
-	$(SRC_DIR)/delay.vhd
+	$(SRC_DIR)/delay.vhd\
+	$(SRC_DIR)/delay_impl.vhd
 
 # packages
 
