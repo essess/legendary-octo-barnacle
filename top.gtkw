@@ -1,0 +1,69 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Tue Apr 28 16:52:15 2020
+[*]
+[dumpfile] "C:\prj\legendary-octo-barnacle\wave.vcd"
+[savefile] "C:\prj\legendary-octo-barnacle\top.gtkw"
+[timestart] 25580000000
+[size] 1536 801
+[pos] -1 -1
+*-33.272301 33250000000 33250000000 33750000000 49250000000 49750000000 65250000000 65750000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top_tb.
+[treeopen] top_tb.dut.
+[treeopen] top_tb.dut.dsss_inst.oct_to_sym_inst.
+[treeopen] top_tb.dut.dsss_inst.sym_to_chip_inst.
+[sst_width] 357
+[signals_width] 192
+[sst_expanded] 1
+[sst_vpaned_height] 328
+@28
+top_tb.dbgsig
+@420
+top_tb.tstcnt
+@28
+top_tb.srst
+@29
+top_tb.clk
+@200
+-
+-
+@28
+top_tb.valid_in
+top_tb.sink_ready
+top_tb.take
+@22
+top_tb.byte[7:0]
+@200
+-
+-
+@28
+top_tb.i_valid_out
+top_tb.i_source_ready
+top_tb.i_give
+@40018420
+[fpshift_count] 15
+top_tb.i_sample[15:0]
+@20000
+-
+-
+-
+-
+-
+@200
+-
+-
+@28
+top_tb.q_valid_out
+top_tb.q_source_ready
+top_tb.q_give
+@40018420
+[fpshift_count] 15
+top_tb.q_sample[15:0]
+@20000
+-
+-
+-
+-
+-
+[pattern_trace] 1
+[pattern_trace] 0

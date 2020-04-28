@@ -9,7 +9,8 @@ SRC = \
 	$(SRC_DIR)/chip_to_dig_qpsk.vhd\
 	$(SRC_DIR)/half_sine_shaper.vhd\
 	$(SRC_DIR)/delay.vhd\
-	$(SRC_DIR)/delay_impl.vhd
+	$(SRC_DIR)/delay_impl.vhd\
+	$(SRC_DIR)/top.vhd
 
 # packages
 
@@ -28,7 +29,8 @@ TB = \
 	$(TB_DIR)/dsss_tb.vhd\
 	$(TB_DIR)/chip_to_dig_qpsk_tb.vhd\
 	$(TB_DIR)/half_sine_shaper_tb.vhd\
-	$(TB_DIR)/delay_tb.vhd
+	$(TB_DIR)/delay_tb.vhd\
+	$(TB_DIR)/top_tb.vhd
 
 GHDL_FLAGS=--std=08 -v --warn-error -fcaret-diagnostics -P/GHDL/0.36-mingw32-mcode/lib/ghdl/vendors/osvvm/v08
 
